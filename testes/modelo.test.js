@@ -23,3 +23,29 @@ test('Testando cadastro de três perguntas', () => {
   expect(perguntas[2].num_respostas).toBe(0);
   expect(perguntas[1].id_pergunta).toBe(perguntas[2].id_pergunta-1);
 });
+
+test('Testando pergunta texto', () => {
+  const textoPergunta = 'O que é o que é, que tem cabeça, corpo, mas não tem braços nem pernas?';
+  modelo.cadastrar_pergunta(textoPergunta);
+  const perguntas = modelo.listar_perguntas();  
+  const id = perguntas[0].id_pergunta;
+  expect(modelo.get_pergunta(id).texto).toBe(textoPergunta);
+});
+
+test('Testando respostas', () => {
+  modelo.cadastrar_pergunta('O que é que é, que quanto mais se tira, maior fica?');
+  const perguntas = modelo.listar_perguntas();  
+  const id = perguntas[0].id_pergunta;
+  modelo.cadastrar_resposta(id, 'O buraco');
+  const respostas = modelo.get_respostas(id);   
+  expect(respostas[0].texto).toBe('O buraco');
+});
+
+test('Testando número de respostas', () => {
+  modelo.cadastrar_pergunta('Dentro da caixa o gato está?');
+  const perguntas = modelo.listar_perguntas();  
+  const id = perguntas[0].id_pergunta;
+  modelo.cadastrar_resposta(id, 'Vivo');
+  modelo.cadastrar_resposta(id, 'Morto');
+  expect(modelo.get_num_respostas(id)).toBe(2);
+});
